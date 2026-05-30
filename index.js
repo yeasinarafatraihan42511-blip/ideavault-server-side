@@ -6,7 +6,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 dotenv.config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = process.env.MONGODB_URI;
 
 const app = express();
@@ -42,7 +42,22 @@ async function run() {
     const result = await ideasCollection.insertOne(ideaData);
     res.json(result);
   })
+
+  app.get('/ideas/:id', async (req, res) => {
+    const id = req.params.id;
+    const result = await ideasCollection.findOne({ _id: new ObjectId(id) });
+    res.json(result);
+  });
   
+  app.patch('/ideas/:id', async (req, res) => {
+    const id = req.params.id;
+    const updateData = req.body;  
+    const result = await ideasCollection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: updateData }
+    );
+    res.json(result);
+  });
 
 
 
