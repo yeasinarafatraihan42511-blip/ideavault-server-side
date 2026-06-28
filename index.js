@@ -61,6 +61,23 @@ const result=await ideasCollection.deleteOne(query);
 res.send(result);
 
 })
+
+app.get("/my-ideas/:email", async (req, res) => {
+
+const email=req.params.email;
+
+const query={
+userEmail:email
+}
+
+const result=await ideasCollection
+.find(query)
+.sort({createdAt:-1})
+.toArray();
+
+res.send(result);
+
+})
   
   app.patch('/ideas/:id', async (req, res) => {
     const id = req.params.id;
