@@ -48,6 +48,19 @@ async function run() {
     const result = await ideasCollection.findOne({ _id: new ObjectId(id) });
     res.json(result);
   });
+  app.delete("/ideas/:id",async(req,res)=>{
+
+const id=req.params.id;
+
+const query={
+_id:new ObjectId(id)
+}
+
+const result=await ideasCollection.deleteOne(query);
+
+res.send(result);
+
+})
   
   app.patch('/ideas/:id', async (req, res) => {
     const id = req.params.id;
