@@ -78,6 +78,21 @@ const result=await ideasCollection
 res.send(result);
 
 })
+app.get("/trending-ideas", async (req, res) => {
+  try {
+    const ideas = await ideasCollection
+      .find({})
+      .sort({ createdAt: -1 }) // Latest first
+      .limit(6)
+      .toArray();
+
+    res.send(ideas);
+  } catch (error) {
+    res.status(500).send({
+      message: "Failed to fetch trending ideas",
+    });
+  }
+});
   
   app.patch('/ideas/:id', async (req, res) => {
     const id = req.params.id;
