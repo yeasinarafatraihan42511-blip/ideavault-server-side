@@ -36,82 +36,82 @@ async function run() {
 
 
 
-  app.post('/ideas', async (req, res) => {
-    const ideaData = req.body;
-    console.log(ideaData);
-    const result = await ideasCollection.insertOne(ideaData);
-    res.json(result);
-  })
+    app.post('/ideas', async (req, res) => {
+      const ideaData = req.body;
+      console.log(ideaData);
+      const result = await ideasCollection.insertOne(ideaData);
+      res.json(result);
+    })
 
-  app.get('/ideas/:id', async (req, res) => {
-    const id = req.params.id;
-    const result = await ideasCollection.findOne({ _id: new ObjectId(id) });
-    res.json(result);
-  });
-  app.delete("/ideas/:id",async(req,res)=>{
-
-const id=req.params.id;
-
-const query={
-_id:new ObjectId(id)
-}
-
-const result=await ideasCollection.deleteOne(query);
-
-res.send(result);
-
-})
-
-app.get("/my-ideas/:email", async (req, res) => {
-
-const email=req.params.email;
-
-const query={
-userEmail:email
-}
-
-const result=await ideasCollection
-.find(query)
-.sort({createdAt:-1})
-.toArray();
-
-res.send(result);
-
-})
-app.get("/trending-ideas", async (req, res) => {
-  try {
-    const ideas = await ideasCollection
-      .find({})
-      .sort({ createdAt: -1 }) // Latest first
-      .limit(6)
-      .toArray();
-
-    res.send(ideas);
-  } catch (error) {
-    res.status(500).send({
-      message: "Failed to fetch trending ideas",
+    app.get('/ideas/:id', async (req, res) => {
+      const id = req.params.id;
+      const result = await ideasCollection.findOne({ _id: new ObjectId(id) });
+      res.json(result);
     });
-  }
-});
-  
-  app.patch('/ideas/:id', async (req, res) => {
-    const id = req.params.id;
-    const updateData = req.body;  
-    const result = await ideasCollection.updateOne(
-      { _id: new ObjectId(id) },
-      { $set: updateData }
-    );
-    res.json(result);
-  });
+    app.delete("/ideas/:id", async (req, res) => {
+
+      const id = req.params.id;
+
+      const query = {
+        _id: new ObjectId(id)
+      }
+
+      const result = await ideasCollection.deleteOne(query);
+
+      res.send(result);
+
+    })
+
+    app.get("/my-ideas/:email", async (req, res) => {
+
+      const email = req.params.email;
+
+      const query = {
+        userEmail: email
+      }
+
+      const result = await ideasCollection
+        .find(query)
+        .sort({ createdAt: -1 })
+        .toArray();
+
+      res.send(result);
+
+    })
+    app.get("/trending-ideas", async (req, res) => {
+      try {
+        const ideas = await ideasCollection
+          .find({})
+          .sort({ createdAt: -1 }) // Latest first
+          .limit(6)
+          .toArray();
+
+        res.send(ideas);
+      } catch (error) {
+        res.status(500).send({
+          message: "Failed to fetch trending ideas",
+        });
+      }
+    });
+
+    app.patch('/ideas/:id', async (req, res) => {
+      const id = req.params.id;
+      const updateData = req.body;
+      const result = await ideasCollection.updateOne(
+        { _id: new ObjectId(id) },
+        { $set: updateData }
+      );
+      res.json(result);
+    });
 
 
 
 
 
-  
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+
+    // await client.connect();
+    // // Send a ping to confirm a successful connection
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
@@ -120,10 +120,10 @@ app.get("/trending-ideas", async (req, res) => {
 }
 run().catch(console.dir);
 
-app.get('/',(req, res) => {
-    res.send("server is running successfully");
+app.get('/', (req, res) => {
+  res.send("server is running successfully");
 })
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
